@@ -1,75 +1,84 @@
+let score = document.querySelector('.score');
+let winnerPanel = document.querySelector('.winner');
+let selection = document.querySelector('.selection');
+
 let humanScore = 0;
 let aiScore = 0;
-
-playGame();
-
+let round = 0;
 
 
-function getAiChoice ()
+function getComputeChoice()
 {
-    let choice = ['rock', 'paper', 'scissor'];
-    return choice[Math.floor(Math.random()* 3)];
+    let choiceArr = ['paper', 'rock', 'scissor'];
+    return choiceArr[Math.floor(Math.random()* 3)];
 }
-
-function getHumanChoice()
-{
-    return prompt("Please Enter rock Paper or Scissor").toLocaleLowerCase();
-}
-
 
 function playRound(humanChoice, aiChoice)
 {
-
     const winningCombo = 
     {
+        paper: 'rock',
         rock: 'scissor',
-        scissor: 'paper',
-        paper:  'rock'
+        scissor: 'paper'
     };
 
     if(aiChoice === humanChoice)
     {
-        console.log('its a tie mga tanga');
+        winnerPanel.textContent = 'It is a draw!!!';
     }
     else if(aiChoice === winningCombo[humanChoice])
     {
-        console.log(`Congrats putangina mo nanalo ka +1 ka saakin`);
+        winnerPanel.textContent = `The winner is: human! ${humanChoice} beats ${aiChoice}`;
         humanScore++;
     }
     else
     {
-        console.log(`so sad putangina talo amputa!!!!`);
-        aiScore++;
+        winnerPanel.textContent = `The winner is AI: ${aiChoice} beats ${humanChoice}`
+        aiScore;
     }
 
-}
-
-if(humanScore === aiScore)
-{
-    console.log(`its a tie talagang mga bobo`);
-    console.log(`humanScore: ${humanScore} ----- aiscore: ${aiScore}`);
-}
-else if(humanScore > aiScore)
-{
-    console.log(`Congrats Stupid you won the game`);
-    console.log(`You score is: ${humanScore}`);
-}
-else
-{
-    console.log("Oh no you loseeee bitch");
+    score.textContent = `Player Score: ${humanScore}`;
 }
 
 
-function playGame()
-{
-    for(let i = 0; i < 10; i++)
+selection.addEventListener('click', (e) =>{
+
+let target = e.target;
+let aiChoice = getComputeChoice();
+
+if(round === 10)
     {
-        let humanChoice = getHumanChoice();
-        let aiChoice = getAiChoice();
-
-        playRound(humanChoice, aiChoice);
+        if(humanScore > aiScore)
+        {
+            winnerPanel.textContent = "Congratulations Human, You have won! ";
+        }
+        else if(humanScore === aiScore)
+        {
+            winnerPanel.textContent = "Its a tie mga tanga";
+        }
+        else
+        {
+            winnerPanel.textContent = "Computer has won, you have lost! ";
+        }
     }
-}
+    else
+    {
+        switch (target.id) {
+            case 'rock':
+                playRound('rock', aiChoice);
+                round++;
+                break;
+            case 'paper':
+                playRound('paper', aiChoice);
+                round++;
+                break;
+            case 'scissor':
+                playRound('scissor', aiChoice);
+                round++;
+                break;
+        }
+            
+    }
 
 
-
+});
